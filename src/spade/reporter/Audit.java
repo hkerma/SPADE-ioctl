@@ -1035,6 +1035,9 @@ public class Audit extends AbstractReporter {
 			case FTRUNCATE:
 				handleTruncate(eventData, syscall);
 				break;
+			case IOCTL:
+				handleIoctl(eventData, syscall);
+				break;
 			default: //SYSCALL.UNSUPPORTED
 				//log(Level.INFO, "Unsupported syscall '"+syscallNum+"'", null, eventData.get("time"), eventId, syscall);
 			}
@@ -1801,6 +1804,46 @@ public class Audit extends AbstractReporter {
 			putTeeSplice(eventData, syscall, time, eventId, fdIn, fdOut, pid, bytes);
 		}
 	}
+
+	// hkerma: add support for Ioctl
+	private void handleIoctl(Map<String, String> eventData, SYSCALL syscall){
+		// ioctl():
+		// - SYSCALL
+		// - EOE
+
+		// read write
+		String eventId = eventData.get(AuditEventReader.EVENT_ID);
+		String time = eventData.get(AuditEventReader.TIME);
+		String pid = eventData.get(AuditEventReader.PID);
+		String fd = eventData.get(AuditEventReader.ARG0);
+		String saddr = null;
+
+		Process process = processManager.handleProcessFromSyscall(eventData);
+		Artifact artifact = null;
+		AbstractEdge edge = null;
+		
+
+		// FileDescriptor fileDescriptor = processManager.getFd(pid, fd);
+		// if(fileDescriptor != null){
+		// 	identifier = fileDescriptor.identifier;
+		// }
+
+		ArtifactIdentifier identifier = getNetworkIdentifierFromFdAndOrSaddr(syscall, time, eventId, pid, fd, saddr);
+
+		// ArtifactIdentifier identifier = addUnknownFd(pid, fd).identifier;
+
+
+			
+		log(Level.INFO, "Caught syscall IOCTL with fd:" + 
+						fd + "operation" + getOperation(syscall), null, time, eventId, syscall);
+
+		artifactManager.artifactVersioned(identifier);
+		artifact = putArtifactFromSyscall(eventData, identifier);
+		edge = new WasGeneratedBy(artifact, process);
+
+		putEdge(edge, "ioctl", time, eventId, AUDIT_SYSCALL_SOURCE);
+	}
+
 
 	private void handleInitModule(Map<String, String> eventData, SYSCALL syscall){
 		// init_module(), and finit_module receive the following messages:

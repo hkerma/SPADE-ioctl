@@ -743,22 +743,20 @@ public class Strace extends AbstractReporter {
                 } else if (syscall.equals("ioctl")) {
 					// String fd = args.substring(0, args.indexOf(','));
                     // if (!fileDescriptors.get(pid).containsKey(fd)) {
-                    // fixDescriptor(pid, fd);
+                    //     fixDescriptor(pid, fd);
                     // }
-                    // if (fileDescriptors.containsKey(pid) &&
-                    // fileDescriptors.get(pid).containsKey(fd)) {
-                    // String path = fileDescriptors.get(pid).get(fd);
-                    // Artifact vertex = new Artifact();
-                    // vertex.addAnnotation("location", path);
-                    // putVertex(vertex);
-                    // WasGeneratedBy wgb = new WasGeneratedBy(vertex,
-                    // processes.get(pid));
-                    // wgb.addAnnotation("operation", syscall);
-                    // wgb.addAnnotation("time", time);
-                    // putEdge(wgb);
+                    // if (fileDescriptors.containsKey(pid) && fileDescriptors.get(pid).containsKey(fd)) {
+                    //     String path = fileDescriptors.get(pid).get(fd);
+                    //     Artifact vertex = new Artifact();
+                    //     vertex.addAnnotation("location", path);
+                    //     putVertex(vertex);
+                    //     WasGeneratedBy wgb = new WasGeneratedBy(vertex,
+                    //     processes.get(pid));
+                    //     wgb.addAnnotation("operation", syscall);
+                    //     wgb.addAnnotation("time", time);
+                    //     putEdge(wgb);
                     // } else {
-                    // log(String.format("%s() failed - descriptor %s not found:\t\t%s",
-                    // syscall, fd, line));
+                    //     log(String.format("%s() failed - descriptor %s not found:\t\t%s", syscall, fd, line));
                     // }
                 } else if (syscall.equals("syscall_983045") || syscall.equals("syscall_983042")) {
 					// Ignore these syscalls

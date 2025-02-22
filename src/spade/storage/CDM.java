@@ -211,6 +211,9 @@ public class CDM extends Kafka {
 				getSet(new TypeOperation(OPMConstants.WAS_GENERATED_BY, OPMConstants.OPERATION_WRITE)), 
 						EventType.EVENT_WRITE);
 		rulesToEventType.put(
+				getSet(new TypeOperation(OPMConstants.WAS_GENERATED_BY, OPMConstants.OPERATION_IOCTL)), 
+						EventType.EVENT_OTHER);
+		rulesToEventType.put(
 				getSet(new TypeOperation(OPMConstants.WAS_GENERATED_BY, OPMConstants.OPERATION_SEND)), 
 						EventType.EVENT_SENDMSG);
 		rulesToEventType.put(

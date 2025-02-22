@@ -210,7 +210,8 @@ public class OPMConstants {
 			OPERATION_MQ_OPEN = "mq_open",
 			OPERATION_MQ_TIMEDSEND = "mq_timedsend",
 			OPERATION_MQ_TIMEDRECEIVE = "mq_timedreceive",
-			OPERATION_MQ_UNLINK = "mq_unlink";
+			OPERATION_MQ_UNLINK = "mq_unlink",
+			OPERATION_IOCTL = "ioctl";
 		
 	private static final Logger logger = Logger.getLogger(OPMConstants.class.getName());
 	
@@ -272,6 +273,7 @@ public class OPMConstants {
 		addSyscallsToOperations(OPERATION_MQ_TIMEDSEND, SYSCALL.MQ_TIMEDSEND);
 		addSyscallsToOperations(OPERATION_MQ_TIMEDRECEIVE, SYSCALL.MQ_TIMEDRECEIVE);
 		addSyscallsToOperations(OPERATION_MQ_UNLINK, SYSCALL.MQ_UNLINK);
+		addSyscallsToOperations(OPERATION_IOCTL, SYSCALL.IOCTL);
 	}
 	
 	/**

@@ -59,6 +59,7 @@ public enum SYSCALL{
 	MQ_OPEN, MQ_TIMEDSEND, MQ_TIMEDRECEIVE, MQ_UNLINK,
 	SHMGET, SHMAT, SHMDT, SHMCTL,
 	MSGGET, MSGSND, MSGRCV, MSGCTL,
+	IOCTL,
 	UNSUPPORTED; // Used for system calls not in this enum (not an actual system call)
 	
 	public static SYSCALL get64BitSyscall(int syscallNum){
@@ -153,6 +154,7 @@ public enum SYSCALL{
 			case 263:	return UNLINKAT;
 			case 1:		return WRITE;
 			case 20:	return WRITEV;
+			case 16: 	return IOCTL;
 			default:	return UNSUPPORTED;
 		}
 	}
