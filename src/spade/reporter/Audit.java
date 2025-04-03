@@ -1038,6 +1038,9 @@ public class Audit extends AbstractReporter {
 			case IOCTL:
 				handleIoctl(eventData, syscall);
 				break;
+			case SETSOCKOPT:
+				handleSetsockopt(eventData, syscall);
+				break;
 			default: //SYSCALL.UNSUPPORTED
 				//log(Level.INFO, "Unsupported syscall '"+syscallNum+"'", null, eventData.get("time"), eventId, syscall);
 			}
@@ -1828,12 +1831,9 @@ public class Audit extends AbstractReporter {
 		// 	identifier = fileDescriptor.identifier;
 		// }
 
-		ArtifactIdentifier identifier = getNetworkIdentifierFromFdAndOrSaddr(syscall, time, eventId, pid, fd, saddr);
-
-		// ArtifactIdentifier identifier = addUnknownFd(pid, fd).identifier;
-
-
-			
+		// ArtifactIdentifier identifier = getNetworkIdentifierFromFdAndOrSaddr(syscall, time, eventId, pid, fd, saddr);
+		ArtifactIdentifier identifier = addUnknownFd(pid, fd).identifier;
+		
 		log(Level.INFO, "Caught syscall IOCTL with fd:" + 
 						fd + "operation" + getOperation(syscall), null, time, eventId, syscall);
 
@@ -1842,6 +1842,45 @@ public class Audit extends AbstractReporter {
 		edge = new WasGeneratedBy(artifact, process);
 
 		putEdge(edge, "ioctl", time, eventId, AUDIT_SYSCALL_SOURCE);
+	}
+
+	// hkerma: add support for setsockopt
+	private void handleSetsockopt(Map<String, String> eventData, SYSCALL syscall){
+		// setsockopt():
+		// - SYSCALL
+		// - EOE
+		
+		String eventId = eventData.get(AuditEventReader.EVENT_ID);
+		String time = eventData.get(AuditEventReader.TIME);
+		String pid = eventData.get(AuditEventReader.PID);
+
+		String sockFd = eventData.get(AuditEventReader.ARG0);
+		String saddr = null;
+
+		Process process = processManager.handleProcessFromSyscall(eventData);
+		Artifact artifact = null;
+		AbstractEdge edge = null;		
+
+		FileDescriptor fileDescriptor = processManager.getFd(pid, sockFd);
+
+
+		ArtifactIdentifier identifier;
+		if(fileDescriptor != null && fileDescriptor.identifier instanceof NetworkSocketIdentifier) {
+			NetworkSocketIdentifier fdNetworkIdentifier = (NetworkSocketIdentifier)fileDescriptor.identifier;
+			identifier = fdNetworkIdentifier;
+		} else {
+			identifier = addUnknownFd(pid, sockFd).identifier;
+		}
+
+		log(Level.INFO, "Caught syscall SETSOCKOPT with sockFd:" + 
+						sockFd + "operation" + getOperation(syscall), null, time, eventId, syscall);
+
+
+		artifactManager.artifactVersioned(identifier);
+		artifact = putArtifactFromSyscall(eventData, identifier);
+		edge = new WasGeneratedBy(artifact, process);
+
+		putEdge(edge, "setsockopt", time, eventId, AUDIT_SYSCALL_SOURCE);
 	}
 
 

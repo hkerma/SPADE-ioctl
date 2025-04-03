@@ -60,6 +60,7 @@ public enum SYSCALL{
 	SHMGET, SHMAT, SHMDT, SHMCTL,
 	MSGGET, MSGSND, MSGRCV, MSGCTL,
 	IOCTL,
+	SETSOCKOPT,
 	UNSUPPORTED; // Used for system calls not in this enum (not an actual system call)
 	
 	public static SYSCALL get64BitSyscall(int syscallNum){
@@ -155,6 +156,7 @@ public enum SYSCALL{
 			case 1:		return WRITE;
 			case 20:	return WRITEV;
 			case 16: 	return IOCTL;
+			case 54:	return SETSOCKOPT;
 			default:	return UNSUPPORTED;
 		}
 	}

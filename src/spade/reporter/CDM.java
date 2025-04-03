@@ -483,6 +483,12 @@ public class CDM extends AbstractReporter{
 								dst1 = event.getSubject();
 							}
 							break;
+							case OPMConstants.OPERATION_SETSOCKOPT:{
+								logger.log(Level.WARNING, "Processing SETSOCKOPT'"+type+"' for event: " + event);
+								src1 = event.getPredicateObject();
+								dst1 = event.getSubject();
+							}
+							break;
 							default:{
 								logger.log(Level.WARNING, "Unhandled event type '"+type+"' for event: " + event);
 								return;
